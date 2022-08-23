@@ -1,7 +1,8 @@
 import React, { useState } from "react";
+import PostForm from "./components/PostForm";
 import PostList from "./components/PostList";
-import MyButton from "./components/UI/button/MyButton";
-import MyInput from "./components/UI/input/MyInput";
+// import MyButton from "./components/UI/button/MyButton";
+// import MyInput from "./components/UI/input/MyInput";
 // import Counter from "./components/Counter"
 // import ClassCounter from "./components/ClassCounter";
 import "./styles/App.css";
@@ -13,51 +14,24 @@ function App() {
     { id: 3, title: "Javascript 3", body: "Description3" },
   ]);
 
-  const [title, setTitle] = useState("");
-  // const [description, setDescription] = useState("");
-
-  const [body, setBody] = useState("")
-
-  const addNewPost = (event) => {
-    event.preventDefault()
-    const newPost = {
-      id: Date.now(),
-      title,
-      body
-    }
-    setPosts([...posts, newPost])
-    setTitle("")
-    setBody("")
-    
+  const createPost = (newPost) => {
+    setPosts([...posts, newPost]);
   };
+
+  const removePost = (post) => {
+    setPosts(posts.filter((p) => p.id !== post.id));
+  };
+
   return (
     <div className="App">
-      <form action="">
-        <MyInput
-          value={title}
-          onChange={(el) => setTitle(el.target.value)}
-          type="text"
-          placeholder="Название поста"
-        />
-
-        
-        <MyInput
-         
-          value={body}
-          onChange={(el) => setBody(el.target.value)}
-          type="text"
-          placeholder="Описание поста"
-        />
-
-        
-        <MyButton onClick={addNewPost}>Создать пост</MyButton>
-      </form>
-      
-      <PostList posts={posts} title="Список 1" />
+      <PostForm create={createPost} />
+      {posts.length !== 0 
+      ? <PostList remove={removePost} posts={posts} title="Список 1" />
+      : 
+        <h1 style={{textAlign: "center"}}>Посты не найдены</h1>
+      }
     </div>
-    
   );
-  
 }
 
 export default App;
