@@ -10,6 +10,7 @@ import "./styles/App.css";
 import { useSortedPosts } from "./hooks/usePosts";
 
 import PostService from "./API/PostService";
+import Loader from "./components/UI/Loader/Loader";
 
 
 
@@ -36,9 +37,13 @@ function App() {
 
   async function fetchPosts() {
     setIsPostsLoading(true)
-    const posts = await PostService.getAll();
+    setTimeout(
+      async ()=> {
+        const posts = await PostService.getAll();
     setPosts(posts)
-    setIsPostsLoading(false)
+    setIsPostsLoading(false)}, 2000
+    )
+    
   }
 
   const removePost = (post) => {
@@ -59,7 +64,7 @@ function App() {
         <PostFilter filter={filter} setFilter={setFilter} />
       </div>
       {isPostsLoading
-      ? <h1>Идет Загрузка...</h1>
+      ? <div style={{display: "flex", justifyContent: "center", marginTop: "50px"}}><Loader></Loader></div> 
        : <PostList
         remove={removePost}
         posts={sortedAndSearchedPosts}
