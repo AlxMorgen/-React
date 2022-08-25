@@ -1,22 +1,45 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PostForm from "./components/PostForm";
 import PostList from "./components/PostList";
-// import MyButton from "./components/UI/button/MyButton";
-// import MyInput from "./components/UI/input/MyInput";
-// import Counter from "./components/Counter"
-// import ClassCounter from "./components/ClassCounter";
+import PostFilter from "./components/PostFilter";
+
+import MyButton from "./components/UI/button/MyButton";
+
+import MyModal from "./components/UI/modal/MyModal";
 import "./styles/App.css";
+import { useSortedPosts } from "./hooks/usePosts";
+
+import PostService from "./API/PostService";
+
+
+
 
 function App() {
-  const [posts, setPosts] = useState([
-    { id: 1, title: "Javascript", body: "Description" },
-    { id: 2, title: "Javascript 2", body: "Description2" },
-    { id: 3, title: "Javascript 3", body: "Description3" },
-  ]);
+  const [posts, setPosts] = useState([]);
+
+  const [filter, setFilter] = useState({ sort: "", query: "" });
+
+  const [modal, setModal] = useState(false);
+
+  const [isPostsLoading, setIsPostsLoading] = useState(false)
+
+  const sortedAndSearchedPosts = useSortedPosts(posts, filter.sort, filter);
+
+  useEffect(() => {
+    fetchPosts()
+  }, []) 
 
   const createPost = (newPost) => {
     setPosts([...posts, newPost]);
+    setModal(false);
   };
+
+  async function fetchPosts() {
+    setIsPostsLoading(true)
+    const posts = await PostService.getAll();
+    setPosts(posts)
+    setIsPostsLoading(false)
+  }
 
   const removePost = (post) => {
     setPosts(posts.filter((p) => p.id !== post.id));
@@ -24,12 +47,26 @@ function App() {
 
   return (
     <div className="App">
-      <PostForm create={createPost} />
-      {posts.length !== 0 
-      ? <PostList remove={removePost} posts={posts} title="Список 1" />
-      : 
-        <h1 style={{textAlign: "center"}}>Посты не найдены</h1>
-      }
+      <button onClick={fetchPosts}>Get Posts</button>
+      <MyButton onClick={() => setModal(true)}>Создать пост</MyButton>
+      <MyModal visible={modal} setVisible={setModal}>
+        {" "}
+        <PostForm create={createPost} />{" "}
+      </MyModal>
+
+      <hr style={{ margin: "15px 0" }} />
+      <div>
+        <PostFilter filter={filter} setFilter={setFilter} />
+      </div>
+      {isPostsLoading
+      ? <h1>Идет Загрузка...</h1>
+       : <PostList
+        remove={removePost}
+        posts={sortedAndSearchedPosts}
+        title="Список 1"
+      />
+    }
+      
     </div>
   );
 }
