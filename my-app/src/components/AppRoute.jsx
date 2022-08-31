@@ -3,9 +3,14 @@ import { Navigate, Route, Routes } from "react-router-dom";
 import { AuthContext } from "../contex";
 
 import { publicRoutes, privateRoutes } from "../router/routes";
+import Loader from "./UI/Loader/Loader";
 
 const AppRoute = () => {
-  const {isAuth} = useContext(AuthContext)
+  const {isAuth, isLoading} = useContext(AuthContext)
+
+  if (isLoading) {
+    return <Loader/>  
+  }
   return isAuth ? (
     <Routes>
       {privateRoutes.map((route) => (
