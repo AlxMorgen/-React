@@ -5,7 +5,8 @@
 }
  #root {
     display: flex;
-    justify-content: center;
+    align-items: center;
+    flex-direction: column;
    
  }
 
@@ -37,4 +38,39 @@
   .post-exit-active {
     transform: translateX(-350px);
     transition: all 500ms ease-in;
+  }
+
+  .post__btns {
+    display: flex;
+  }
+
+  .page__wrapper {
+    margin-top: 30px;
+    display: flex;
+  }
+
+  .page {
+    padding: 10px;
+    border: 1px solid teal;
+    cursor: pointer;
+  }
+
+  .page__current {
+    border: 2px solid orange;
+
+    font-weight: bold;
+  }
+
+  .navbar {
+    height: 50px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+    background-color: beige;
+
+  }
+
+  .navbar__links {
+    margin-left: auto;
   }

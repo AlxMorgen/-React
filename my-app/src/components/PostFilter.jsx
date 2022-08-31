@@ -3,11 +3,19 @@ import MyInput from './UI/input/MyInput'
 import MySelect from './UI/select/MySelect'
 
 const PostFilter = ({filter, setFilter}) => {
+
   return (
+    
     <div>
+      
         <MyInput 
     value={filter.value}
-    onChange={e => setFilter({...filter, query: e.target.value})}
+    onChange={e =>{
+    
+      setFilter({...filter, query: e.target.value})
+    }
+      
+      }
     placeholder="Поиск"/>
     <MySelect 
       value={filter.sort}
