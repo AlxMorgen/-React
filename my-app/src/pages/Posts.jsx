@@ -8,7 +8,7 @@ import MyButton from "../components/UI/button/MyButton";
 
 import MyModal from "../components/UI/modal/MyModal";
 import "../styles/App.css";
-import { useSortedPosts } from "../hooks/usePosts";
+import { usePosts, useSortedPosts } from "../hooks/usePosts";
 
 import PostService from "../API/PostService";
 import Loader from "../components/UI/Loader/Loader";
@@ -39,7 +39,7 @@ function Posts() {
     }
   );
 
-  const sortedAndSearchedPosts = useSortedPosts(posts, filter.sort, filter);
+  const sortedAndSearchedPosts = usePosts(posts, filter.sort, filter.query);
 
   useObserver(lastElement, page < totalPages, isPostsLoading, () => {
     setPage(page + 1);
